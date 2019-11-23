@@ -3,10 +3,15 @@ from subprocess import check_call
 from signal import pause
 import os
 import time
+import pygame
 
-button = Button(21, hold_time = 0.6)
+pygame.mixer.init()
+button = Button(21)
 end_time = 0
 start_time = 0
+did_time_end = False
+no = 0.0001 #less than = error
+dit = 0.3 #less than
 
 def starttime():
     global start_time
@@ -18,10 +23,22 @@ def endtime():
 
 def aorb():
     global button
-    button.when_pressed = starttime
-    button.when_released = endtime
+    button.wait_for_press()
+    button.wait_for_release()
     time_lapsed = end_time - start_time
-    print(time_lapsed)
+    if time_lapsed < no:
+        print("ERROR")
+    elif time_lapsed > dit:
+        print("_", end = "")
+        pygame.mixer.music.load("Long.wav")
+        pygame.mixer.music.play()
+    else:
+        print(".", end = "")
+        pygame.mixer.music.load("Short.wav")
+        pygame.mixer.music.play()
 
-aorb()
+button.when_pressed = starttime
+button.when_released = endtime
+while True:
+    aorb()
 pause()
