@@ -22,46 +22,39 @@ MORSE_CODE_DICT = { 'A':'.-', 'B':'-...',
    '(':'-.--.', ')':'-.--.-'
 }
 
-current_message = ""
+current_letter = ""
+current_word = []
 tick = 0
 button = Button(21) # The button
 cool_lock = thr.allocate_lock()
 
-"""def decode(message):
-   i = 0 
-   message += ' '
-   decipher = ''
-   mycitext = ''
-   for myletter in message:
-      # checks for space
-      if (myletter != ' '):
-         i = 0
-         mycitext += myletter
-      else:
-         i += 1
-         if i == 2 :
-            decipher += ' '
-         else:
-            decipher += list(MORSE_CODE_DICT.keys())[list(MORSE_CODE_DICT.values()).index(mycitext)]
-            mycitext = ''
-   return decipher
-    """
-#DO NOT DELETE PLEASE
+
+def decodeAlexandre(message):
+    for i in message:
+        if i in list(MORSE_CODE_DICT.values()):
+            for K in MORSE_CODE_DICT:
+                if MORSE_CODE_DICT[K] == i:
+                    print(K, end = "")
+    print('')
+
 def ditordot():
-    global current_message
+    global current_letter
     global tick
     global cool_lock
+    global current_word
     with cool_lock:
         if tick>= 7:
             tick = 0
             print("  ", end = "")
-            current_message += "  "
-            print(decode(current_message))
-            current_message = ""
+            current_word.append(current_letter)
+            print(current_word)
+            decodeAlexandre(current_word)
+            current_word = []
         if tick >= 3 and tick <= 7:
             tick = 0
             print(" ", end = "")
-            current_message += " "
+            current_word.append(current_letter)
+            current_letter = ""
     ditlength = 0.15#if the button press is less than this length, it will be a dit, else a dot
     badlength = 0.009
     global button
@@ -72,10 +65,10 @@ def ditordot():
         pass
     elif presslength < ditlength:
         print(".", end = "")
-        current_message += "."
+        current_letter += "."
     else:
         print("-", end = "")
-        current_message += "-"
+        current_letter += "-"
     with cool_lock:
         tick = 0
 
