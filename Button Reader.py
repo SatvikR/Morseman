@@ -50,6 +50,7 @@ def ditordot():
             print(current_word)
             decodeAlexandre(current_word)
             current_word = []
+            current_letter = ""
         if tick >= 3 and tick <= 7:
             tick = 0
             print(" ", end = "")
